@@ -5,6 +5,30 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "plugins": [
+      "expo-router"
+    ],
+    "scheme": "major-app",
+    "icon": "./src/assets/icon.png",
+    "splash": {
+      "backgroundColor": "#fff",
+      "image": "./src/assets/splash.png"
+    },
+    "android": {
+      "icon": "./src/assets/icon.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "backgroundColor": "#fff"
+      }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "dccc75ab-a452-497e-82a8-34f571a5b617"
+      }
+    }
   }
 }
