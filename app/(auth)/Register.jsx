@@ -13,9 +13,16 @@ import {
 	ActivityIndicator,
 	StatusBar,
 	Keyboard,
+	Pressable,
 	TouchableWithoutFeedback,
 } from "react-native";
-import React, { useState, useRef, useEffect } from "react";
+import React, {
+	useState,
+	useRef,
+	useEffect,
+	useMemo,
+	useCallback,
+} from "react";
 import { colors } from "../../src/constants/styles";
 const { width, height } = Dimensions.get("screen");
 import Email from "../../src/assets/email.svg";
@@ -28,6 +35,8 @@ import { validateEmail } from "../../src/utils/index.js";
 import Danger from "../../src/assets/danger.svg";
 import { checkUser } from "../../src/utils/response";
 import { Toast } from "toastify-react-native";
+import DatePicker from "react-native-date-picker";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 const Register = () => {
 	const [RegisterInp, setRegisterInp] = useState({
@@ -35,6 +44,7 @@ const Register = () => {
 		password: "",
 		name: "",
 		lastName: "",
+		date: "",
 	});
 	const [CPassword, setCPassword] = useState("");
 	const [loading, setloading] = useState(false);
@@ -42,7 +52,17 @@ const Register = () => {
 		state: 0,
 		message: "",
 	});
+	const [date, setdate] = useState(new Date());
 
+	const bottomSheetRef = useRef(null);
+	const snapPoints = useMemo(() => ["35%"], []);
+
+	const handleSheetChanges = useCallback((index) => {
+		console.log("handleSheetChanges", index);
+	}, []);
+	const handlePresentModalPress = useCallback(() => {
+		bottomSheetRef.current?.present();
+	}, []);
 	function checkPassword() {
 		if (!validateEmail(RegisterInp.email) && RegisterInp.email) {
 			seterror({ state: 1, message: "Your email is not valid." });
@@ -97,6 +117,45 @@ const Register = () => {
 			style={{ flex: 1 }}
 		>
 			<StatusBar barStyle={"dark-content"} />
+			<BottomSheetModal
+				ref={bottomSheetRef}
+				index={0}
+				snapPoints={snapPoints}
+				onChange={handleSheetChanges}
+				enableDismissOnClose
+				style={{
+					shadowColor: "#000",
+					shadowOffset: {
+						width: 0,
+						height: 12,
+					},
+					shadowOpacity: 0.58,
+					shadowRadius: 16.0,
+
+					elevation: 24,
+				}}
+			>
+				<View
+					style={{
+						flex: 1,
+						justifyContent: "center",
+						alignItems: "center",
+					}}
+				>
+					<DatePicker
+						mode='date'
+						theme='light'
+						date={date}
+						onDateChange={(date) => {
+							setdate(date);
+
+							setRegisterInp((prevState) => {
+								return { ...prevState, date: date.toLocaleDateString() };
+							});
+						}}
+					/>
+				</View>
+			</BottomSheetModal>
 			<TouchableWithoutFeedback
 				style={{ width: width, flex: 1 }}
 				onPress={Keyboard.dismiss}
@@ -193,6 +252,27 @@ const Register = () => {
 								}}
 							/>
 						</View>
+						<Pressable
+							onPress={handlePresentModalPress}
+							style={styles.inputStyle}
+						>
+							<View style={{ width: width / 13 }}>
+								<User
+									style={{ transform: [{ scale: (height * 0.75) / 700 }] }}
+								/>
+							</View>
+
+							<Text
+								style={{
+									fontFamily: "f2Bold",
+									textTransform: "capitalize",
+									color: RegisterInp.date ? colors.bColor : colors.bAColor,
+								}}
+							>
+								{RegisterInp.date ? date.toDateString() : "Date of birth"}
+							</Text>
+						</Pressable>
+
 						<View style={styles.inputStyle}>
 							<View style={{ width: 30 }}>
 								<Email
@@ -282,7 +362,12 @@ const Register = () => {
 							}}
 							title='Register'
 							activeOpacity={0.7}
-							onPress={validateRegsiter}
+							onPress={
+								// () => {
+								// 	router.push("Register2");
+								// }
+								validateRegsiter
+							}
 						>
 							<LinearGradient
 								colors={[colors.d2Color, colors.d1Color]}

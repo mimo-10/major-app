@@ -82,7 +82,7 @@ export default function Page() {
 		return <Redirect href={"/Onboards"} />;
 	} else {
 		return (
-			<Redirect href={"/Login"} />
+			<Redirect href={"/Register"} />
 			// {/* <Link style={styles.subtitle} href='/Home'>
 			// 	T the first page of your app.
 			// </Link>

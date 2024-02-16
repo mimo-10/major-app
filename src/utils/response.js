@@ -167,6 +167,27 @@ export async function sendOtp(setloading, email, toast, setsent) {
 
 export async function register(setloading, registerObj, navigation, toast) {
 	setloading(true);
+	let { email, name, last, password, phone, Function, ccp, level, location } =
+		registerObj;
+	if (!(name && email && last && Function && location && phone && password)) {
+		toast.error("Please fill all the fields", "top");
+		setloading(false);
+		return;
+	} else {
+		if (Function == "student") {
+			if (!level) {
+				toast.error("Please enter your level", "top");
+				setloading(false);
+				return;
+			}
+		} else if (Function == "teacher") {
+			if (!ccp) {
+				toast.error("Please enter your CCP number", "top");
+				setloading(false);
+				return;
+			}
+		}
+	}
 	console.log(registerObj);
 	try {
 		var res = await fetch(`${server_URi}/api/user/registration`, {

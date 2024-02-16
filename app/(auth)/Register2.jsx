@@ -40,6 +40,22 @@ import { register } from "../../src/utils/response.js";
 import { Toast } from "toastify-react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import cities from "../../src/constants/cities.js";
+import levels from "../../src/constants/levels.js";
+function dataCreate(data) {
+	let rs = [];
+	for (let i = 0; i < data.level.length; i++) {
+		console.log(data.major[data.level[i]]);
+		for (let j = 0; j < data.major[data.level[i]].length; j++) {
+			rs.push({
+				label:
+					data.level[i] + ", " + data.major[data.level[i]][j].toUpperCase(),
+				value:
+					data.level[i] + ", " + data.major[data.level[i]][j].toUpperCase(),
+			});
+		}
+	}
+	return rs;
+}
 // import data_w from "../../src/constants/cities(reduit).js";
 
 // const Function = (text, type, Svg) => {
@@ -75,8 +91,6 @@ wilayas = wilayas.filter((wilaya, index) => wilayas.indexOf(wilaya) === index);
 data_w = wilayas.map((wilaya) => {
 	return { label: wilaya, value: wilaya };
 });
-
-const levels = [];
 
 const Register = () => {
 	const [RegisterInp, setRegisterInp] = useState({
@@ -167,7 +181,7 @@ const Register = () => {
 			});
 		}
 	}
-	console.log(data_c, selelected_wilaya);
+
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -437,26 +451,34 @@ const Register = () => {
 								}}
 							/>
 						</View>
+
 						<Dropdown
-							mode='modal'
+							mode='default'
 							style={[styles.inputStyle, { flexDirection: "column" }]}
 							placeholderStyle={styles.placeholderStyle}
 							selectedTextStyle={styles.selectedTextStyle}
 							inputSearchStyle={styles.inputSearchStyle}
 							iconStyle={styles.iconStyle}
-							data={levels}
-							search
+							data={dataCreate(levels[0])}
+							// search
 							labelField='label'
 							valueField='value'
-							placeholder='Level'
+							placeholder={
+								RegisterInp.level
+									? `${RegisterInp.level.level} ${RegisterInp.level.major}`
+									: "Level"
+							}
 							searchPlaceholder='Search...'
-							value={RegisterInp.level}
+							value={`${RegisterInp.level.level} ${RegisterInp.level.major}`}
 							disable={RegisterInp.Function == "student" ? false : true}
 							onChange={(item) => {
 								setRegisterInp((prevState) => {
 									return {
 										...prevState,
-										location: { ...prevState.location, level: item.value },
+										level: {
+											level: item.value.split(",")[0],
+											major: item.value.split(",")[1].trim(),
+										},
 									};
 								});
 							}}

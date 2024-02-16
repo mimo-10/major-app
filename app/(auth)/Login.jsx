@@ -37,7 +37,6 @@ import { useRealm } from "@realm/react";
 import { validateEmail } from "../../src/utils/index.js";
 import Danger from "../../src/assets/danger.svg";
 import { Toast } from "toastify-react-native";
-import { login } from "../../src/utils/response.js";
 
 const Login = () => {
 	const [loginInp, setloginInp] = useState({
