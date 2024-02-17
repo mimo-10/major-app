@@ -60,8 +60,14 @@ export default function Page() {
 	let state = useQuery("Onboard", (states) => {
 		return states;
 	});
+
+	let user = useQuery("User", (data) => {
+		return data;
+	});
+
 	state = state[0] ? state[0].state : false;
-	console.log(Boolean(state), state, "state");
+
+	console.log(state, user.length);
 	const onLayoutRootView = useCallback(async () => {
 		if (appIsReady) {
 			await SplashScreen.hideAsync();
@@ -71,18 +77,21 @@ export default function Page() {
 	if (!appIsReady) {
 		return null;
 	}
-	const Stack = createStackNavigator();
+
 	// const tap = Gesture.Tap();
 	// const width = useSharedValue(100);
 
 	// const handlePress = () => {
 	// 	width.value = width.value + 50;
 	// };
+
 	if (!state) {
 		return <Redirect href={"/Onboards"} />;
+	} else if (user.length) {
+		return <Home />;
 	} else {
 		return (
-			<Redirect href={"/Register"} />
+			<Redirect href={"/Login"} />
 			// {/* <Link style={styles.subtitle} href='/Home'>
 			// 	T the first page of your app.
 			// </Link>

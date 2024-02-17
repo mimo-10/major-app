@@ -7,7 +7,7 @@ import {
 	CardStyleInterpolators,
 	StackCardStyleInterpolator,
 } from "@react-navigation/stack";
-import { ParamListBase, StackNavigationState } from "@react-navigation/native";
+
 import { createStackNavigator } from "@react-navigation/stack";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";

@@ -368,62 +368,128 @@ const Register = () => {
 							{error.message}
 						</Text>
 					</View>
-
-					<View style={styles.inputcontainer}>
-						<Pressable
-							onPress={handlePresentModalPress}
-							style={styles.inputStyle}
-						>
-							<View style={{ width: width / 13 }}>
-								<User
-									style={{ transform: [{ scale: (height * 0.75) / 700 }] }}
-								/>
-							</View>
-
-							<Text
-								style={{
-									fontFamily: "f2Bold",
-									textTransform: "capitalize",
-									color: RegisterInp.Function ? colors.bColor : colors.bAColor,
-								}}
-								value={RegisterInp.name}
-								onChange={(name) => {
-									setRegisterInp((prevState) => {
-										return { ...prevState, name };
-									});
-								}}
-							>
-								{RegisterInp.Function ? RegisterInp.Function : "Function"}
-							</Text>
-						</Pressable>
-
-						<View style={styles.inputStyle}>
-							<View style={{ width: width / 13 }}>
-								<User
-									style={{ transform: [{ scale: (height * 0.75) / 700 }] }}
-								/>
-							</View>
-
-							<TextInput
-								style={{
-									justifyContent: "center",
-									alignItems: "center",
-									flex: 1,
-									fontFamily: "f2Bold",
-									color: colors.bColor,
-								}}
-								editable={RegisterInp.Function == "teacher" ? true : false}
-								maxLength={12}
-								placeholder='CCP number (teachers)'
-								keyboardType='number-pad'
-								value={RegisterInp.Function == "student" ? "" : RegisterInp.ccp}
-								onChangeText={(ccp) => {
-									setRegisterInp((prevState) => {
-										return { ...prevState, ccp };
-									});
-								}}
-							/>
+					<Pressable
+						onPress={handlePresentModalPress}
+						style={styles.inputStyle}
+					>
+						<View style={{ width: width / 13 }}>
+							<User style={{ transform: [{ scale: (height * 0.75) / 700 }] }} />
 						</View>
+
+						<Text
+							style={{
+								fontFamily: "f2Bold",
+								textTransform: "capitalize",
+								color: RegisterInp.Function ? colors.bColor : colors.bAColor,
+							}}
+							value={RegisterInp.name}
+							onChange={(name) => {
+								setRegisterInp((prevState) => {
+									return { ...prevState, name };
+								});
+							}}
+						>
+							{RegisterInp.Function ? RegisterInp.Function : "Function"}
+						</Text>
+					</Pressable>
+					<View style={styles.inputcontainer}>
+						{RegisterInp.Function ? (
+							RegisterInp.Function == "student" ? (
+								<Dropdown
+									mode='default'
+									style={[styles.inputStyle, { flexDirection: "column" }]}
+									placeholderStyle={styles.placeholderStyle}
+									selectedTextStyle={styles.selectedTextStyle}
+									inputSearchStyle={styles.inputSearchStyle}
+									iconStyle={styles.iconStyle}
+									data={dataCreate(levels[0])}
+									// search
+									labelField='label'
+									valueField='value'
+									placeholder={
+										RegisterInp.level
+											? `${RegisterInp.level.level} ${RegisterInp.level.major}`
+											: "Choose your major"
+									}
+									value={`${RegisterInp.level.level} ${RegisterInp.level.major}`}
+									onChange={(item) => {
+										setRegisterInp((prevState) => {
+											return {
+												...prevState,
+												level: {
+													level: item.value.split(",")[0],
+													major: item.value.split(",")[1].trim(),
+												},
+											};
+										});
+									}}
+									renderLeftIcon={() => (
+										<User
+											style={{
+												transform: [{ scale: (height * 0.75) / 700 }],
+												marginRight: 15,
+											}}
+										/>
+									)}
+									renderItem={(item) => {
+										return (
+											<View style={styles.item}>
+												<Text style={styles.textItem}>{item.value}</Text>
+											</View>
+										);
+									}}
+								/>
+							) : (
+								<View style={styles.inputStyle}>
+									<View style={{ width: width / 13 }}>
+										<User
+											style={{ transform: [{ scale: (height * 0.75) / 700 }] }}
+										/>
+									</View>
+
+									<TextInput
+										style={{
+											justifyContent: "center",
+											alignItems: "center",
+											flex: 1,
+											fontFamily: "f2Bold",
+											color: colors.bColor,
+										}}
+										editable={RegisterInp.Function == "teacher" ? true : false}
+										maxLength={12}
+										placeholder='CCP number '
+										keyboardType='number-pad'
+										value={
+											RegisterInp.Function == "student" ? "" : RegisterInp.ccp
+										}
+										onChangeText={(ccp) => {
+											setRegisterInp((prevState) => {
+												return { ...prevState, ccp };
+											});
+										}}
+									/>
+								</View>
+							)
+						) : (
+							<View
+								style={[
+									styles.inputStyle,
+									{ justifyContent: "center", alignItems: "center" },
+								]}
+							>
+								<Text
+									style={{
+										justifyContent: "center",
+										alignItems: "center",
+										flex: 1,
+										fontFamily: "f2Bold",
+										color: colors.bAColor,
+									}}
+								>
+									Select your function
+								</Text>
+							</View>
+						)}
 
 						<View style={styles.inputStyle}>
 							<View style={{ width: width / 13 }}>
@@ -452,52 +518,6 @@ const Register = () => {
 							/>
 						</View>
 
-						<Dropdown
-							mode='default'
-							style={[styles.inputStyle, { flexDirection: "column" }]}
-							placeholderStyle={styles.placeholderStyle}
-							selectedTextStyle={styles.selectedTextStyle}
-							inputSearchStyle={styles.inputSearchStyle}
-							iconStyle={styles.iconStyle}
-							data={dataCreate(levels[0])}
-							// search
-							labelField='label'
-							valueField='value'
-							placeholder={
-								RegisterInp.level
-									? `${RegisterInp.level.level} ${RegisterInp.level.major}`
-									: "Level"
-							}
-							searchPlaceholder='Search...'
-							value={`${RegisterInp.level.level} ${RegisterInp.level.major}`}
-							disable={RegisterInp.Function == "student" ? false : true}
-							onChange={(item) => {
-								setRegisterInp((prevState) => {
-									return {
-										...prevState,
-										level: {
-											level: item.value.split(",")[0],
-											major: item.value.split(",")[1].trim(),
-										},
-									};
-								});
-							}}
-							renderLeftIcon={() => (
-								<User
-									style={{
-										transform: [{ scale: (height * 0.75) / 700 }],
-										marginRight: 15,
-									}}
-								/>
-							)}
-							renderItem={(item) => {
-								return (
-									<View style={styles.item}>
-										<Text style={styles.textItem}>{item.label}</Text>
-									</View>
-								);
-							}}
-						/>
 						<Dropdown
 							mode='modal'
 							style={[styles.inputStyle, { flexDirection: "column" }]}
@@ -675,6 +695,7 @@ const styles = StyleSheet.create({
 		borderColor: colors.bAColor,
 		borderWidth: 2,
 		borderRadius: 10,
+
 		width: width * 0.8,
 		height: height / 14 > 50 ? 50 : height / 14,
 		alignItems: "center",

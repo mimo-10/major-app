@@ -88,7 +88,8 @@ const Register = () => {
 				RegisterInp.lastName &&
 				RegisterInp.email &&
 				RegisterInp.password &&
-				CPassword
+				CPassword &&
+				RegisterInp.date
 			) {
 				return checkUser(setloading, RegisterInp, router, Toast);
 			} else {
@@ -181,10 +182,12 @@ const Register = () => {
 							justifyContent: "center",
 							alignItems: "center",
 							height: height / 20 > 35 ? 35 : height / 20,
-							borderWidth: 1,
+							borderWidth: 0.5,
+							paddingHorizontal: 7,
 							borderRadius: 10,
 							flexDirection: "row",
 							overflow: "hidden",
+
 							backgroundColor: "#fff",
 							opacity: error.message ? 1 : 0,
 						}}
@@ -460,7 +463,7 @@ const styles = StyleSheet.create({
 	inputcontainer: {
 		display: "flex",
 
-		gap: 5,
+		gap: height / 72,
 	},
 	RegisterContainer: {
 		justifyContent: "space-between",
@@ -478,7 +481,7 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flexDirection: "row",
 		gap: width / 22,
-		marginTop: height / 58 > 12 ? 12 : height / 58,
+		// marginTop: height / 58 > 12 ? 12 : height / 58,
 	},
 	auth3: {
 		borderRadius: 23,

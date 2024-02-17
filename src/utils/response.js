@@ -19,17 +19,20 @@ export async function login(setloading, loginObj, navigation, toast, realm) {
 			// localStorage.setItem("user", JSON.stringify(res.data));
 			realm.write(() => {
 				realm.create("User", {
-					_id: data._id + "5458",
+					_id: data._id,
 					name: data.name,
-					// birth: data.birth,
+					birth: data.birth,
 					last: data.last,
 					verified: data.verified,
 					pic: data.pic,
 					username: data.username,
-					// function: data.function,
+					function: data.function,
 					email: data.email,
-					// about: data.about,
+					about: data.about,
 					token: data.token,
+					phone: data.phone,
+
+					// classrooms : []
 				});
 			});
 			// const val = await AsyncStorage.setItem("user", JSON.stringify(res.data));
@@ -93,17 +96,18 @@ export async function VerifyOtp(setloading, data, navigation, toast, realm) {
 			// localStorage.setItem("user", JSON.stringify(res.data));
 			realm.write(() => {
 				realm.create("User", {
-					_id: data._id + "5453228",
+					_id: data._id,
 					name: data.name,
-					// birth: data.birth,
+					birth: data.birth,
 					last: data.last,
 					verified: data.verified,
 					pic: data.pic,
 					username: data.username,
-					// function: data.function,
+					function: data.function,
 					email: data.email,
-					// about: data.about,
+					about: data.about,
 					token: data.token,
+					phone: data.phone,
 				});
 			});
 			// const val = await AsyncStorage.setItem("user", JSON.stringify(res.data));
