@@ -16,7 +16,7 @@ const Home = ({ navigation }) => {
 	return (
 		<View>
 			<StatusBar />
-			<Link href='/Test'>{data[0].name + " " + data[0].last}</Link>
+			<Link href='/Test'>{data[0].function}</Link>
 		</View>
 	);
 };

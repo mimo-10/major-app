@@ -43,9 +43,9 @@ export default function Page() {
 	useEffect(() => {
 		async function prepare() {
 			try {
-				// realm.write(() => {
-				// 	realm.deleteAll();
-				// });
+				realm.write(() => {
+					realm.deleteAll();
+				});
 
 				await Font.loadAsync(customFonts);
 				// await new Promise((resolve) => setTimeout(resolve, 20));

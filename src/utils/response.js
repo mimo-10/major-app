@@ -13,7 +13,7 @@ export async function login(setloading, loginObj, navigation, toast, realm) {
 		});
 		res = await res.json();
 		data = res.data;
-
+		console.log(data);
 		if (res.status === "success") {
 			toast.success("you are now logged in, redirecting after 4s.", "top");
 			// localStorage.setItem("user", JSON.stringify(res.data));
