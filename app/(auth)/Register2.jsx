@@ -33,14 +33,30 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Link, router, useLocalSearchParams } from "expo-router";
 import { validateEmail } from "../../src/utils/index.js";
 import Danger from "../../src/assets/danger.svg";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+	BottomSheetModal,
+	BottomSheetBackdrop,
+} from "@gorhom/bottom-sheet";
 import Teacher from "../../src/assets/student.svg";
 import Student from "../../src/assets/teacher.svg";
+import Location from "../../src/assets/location.svg";
+import Function from "../../src/assets/function.svg";
+import Phone from "../../src/assets/phone.svg";
+import Major from "../../src/assets/major.svg";
+import Pay from "../../src/assets/pay.svg";
+// import Function from "../../src/assets/function.svg";
 import { register } from "../../src/utils/response.js";
 import { Toast } from "toastify-react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import cities from "../../src/constants/cities.js";
 import levels from "../../src/constants/levels.js";
+import { BlurView } from "expo-blur";
+import Animated, {
+	useSharedValue,
+	useDerivedValue,
+	useAnimatedProps,
+} from "react-native-reanimated";
+
 function dataCreate(data) {
 	let rs = [];
 	for (let i = 0; i < data.level.length; i++) {
@@ -103,7 +119,7 @@ const Register = () => {
 	data_c = communes.filter((commune) => {
 		return commune.wilaya == selelected_wilaya;
 	});
-
+	const AnimatedBlur = Animated.createAnimatedComponent(BlurView);
 	const [error, seterror] = useState({
 		state: 0,
 		message: "",
@@ -139,6 +155,55 @@ const Register = () => {
 		bottomSheetRef.current?.present();
 	}, []);
 
+	const animatedPosition = useSharedValue(height);
+	const [currentPosition, setCurrentPosition] = React.useState(0);
+
+	useEffect(() => {
+		console.log(currentPosition);
+	}, [currentPosition]);
+
+	const renderBackdrop = useCallback(
+		(props) => {
+			return (
+				// <AnimatedBlur
+				// 	{...props}
+				// 	blurType={"materialDark"}
+				// 	blurAmount={5 * (animatedPosition.value / height)}
+				// >
+				// 	<BottomSheetBackdrop
+				// 		{...props}
+				// 		disappearsOnIndex={-1}
+				// 		appearsOnIndex={0}
+				// 		children={<BlurView blurAmount={100} />}
+				// 		pressBehavior={"close"}
+				// 		// animatedPosition={(n) => {
+				// 		// 	console.log(n);
+				// 		// }}
+				// 		opacity={0.6}
+				// 	></BottomSheetBackdrop>
+				// </AnimatedBlur>
+				<AnimatedBlur
+					{...props}
+					animatedProps={useAnimatedProps(() => {
+						return {
+							intensity: 25 * ((height - animatedPosition.value) / height),
+						};
+					})}
+				>
+					<BottomSheetBackdrop
+						{...props}
+						disappearsOnIndex={-1}
+						appearsOnIndex={0}
+						pressBehavior={"close"}
+						opacity={0.6}
+					></BottomSheetBackdrop>
+				</AnimatedBlur>
+			);
+		},
+
+		[],
+	);
+
 	const params = useLocalSearchParams();
 
 	// <BottomSheetModal
@@ -152,48 +217,25 @@ const Register = () => {
 	// 	</View>
 	// </BottomSheetModal>;
 
-	function validateRegsiter() {
-		if (!error.state) {
-			if (
-				RegisterInp.name &&
-				RegisterInp.lastName &&
-				RegisterInp.email &&
-				RegisterInp.password &&
-				CPassword
-			) {
-				return register(setLoading, params, router, Toast);
-			} else {
-				seterror({
-					state: 0,
-					message: "Please fill of the fields.",
-				});
-			}
-		} else if (
-			!RegisterInp.name &&
-			!RegisterInp.lastName &&
-			!RegisterInp.email &&
-			!RegisterInp.password &&
-			!CPassword
-		) {
-			seterror({
-				state: 0,
-				message: "Please fill of the fields.",
-			});
-		}
-	}
-
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS === "ios" ? "padding" : "height"}
 			style={{ flex: 1 }}
 		>
 			<StatusBar barStyle={"dark-content"} />
+
 			<BottomSheetModal
 				ref={bottomSheetRef}
 				index={0}
 				snapPoints={snapPoints}
 				onChange={handleSheetChanges}
-				enableDismissOnClose
+				backdropComponent={(props) => renderBackdrop(props)}
+				// backgroundComponent={{}}
+				animatedPosition={animatedPosition}
+				enableDismissOnClose={true}
+				// onDismiss={() => {
+				// 	// animatedPosition.value = 0;
+				// }}
 				style={{
 					shadowColor: "#000",
 					shadowOffset: {
@@ -373,7 +415,9 @@ const Register = () => {
 						style={styles.inputStyle}
 					>
 						<View style={{ width: width / 13 }}>
-							<User style={{ transform: [{ scale: (height * 0.75) / 700 }] }} />
+							<Function
+								style={{ transform: [{ scale: (height * 0.75) / 700 }] }}
+							/>
 						</View>
 
 						<Text
@@ -424,7 +468,7 @@ const Register = () => {
 										});
 									}}
 									renderLeftIcon={() => (
-										<User
+										<Major
 											style={{
 												transform: [{ scale: (height * 0.75) / 700 }],
 												marginRight: 15,
@@ -442,7 +486,7 @@ const Register = () => {
 							) : (
 								<View style={styles.inputStyle}>
 									<View style={{ width: width / 13 }}>
-										<User
+										<Pay
 											style={{ transform: [{ scale: (height * 0.75) / 700 }] }}
 										/>
 									</View>
@@ -493,7 +537,7 @@ const Register = () => {
 
 						<View style={styles.inputStyle}>
 							<View style={{ width: width / 13 }}>
-								<User
+								<Phone
 									style={{ transform: [{ scale: (height * 0.75) / 700 }] }}
 								/>
 							</View>
@@ -542,7 +586,7 @@ const Register = () => {
 								});
 							}}
 							renderLeftIcon={() => (
-								<User
+								<Location
 									style={{
 										transform: [{ scale: (height * 0.75) / 700 }],
 										marginRight: 15,
@@ -581,7 +625,7 @@ const Register = () => {
 								});
 							}}
 							renderLeftIcon={() => (
-								<User
+								<Location
 									style={{
 										transform: [{ scale: (height * 0.75) / 700 }],
 										marginRight: 15,

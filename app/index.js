@@ -1,6 +1,6 @@
 /** @format */
 import "react-native-gesture-handler";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
@@ -14,7 +14,7 @@ import {
 import Animated, { useSharedValue } from "react-native-reanimated";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import Home from "./Home";
+import Home from "./(tabs)/Home";
 import Test from "./Test";
 // import { Link } from "@react-navigation/native";
 import { Link, Redirect, router } from "expo-router";
@@ -43,9 +43,9 @@ export default function Page() {
 	useEffect(() => {
 		async function prepare() {
 			try {
-				realm.write(() => {
-					realm.deleteAll();
-				});
+				// realm.write(() => {
+				// 	realm.deleteAll();
+				// });
 
 				await Font.loadAsync(customFonts);
 				// await new Promise((resolve) => setTimeout(resolve, 20));
@@ -88,10 +88,11 @@ export default function Page() {
 	if (!state) {
 		return <Redirect href={"/Onboards"} />;
 	} else if (user.length) {
-		return <Home />;
+		return <Redirect href={"/Home"} />;
 	} else {
 		return (
 			<Redirect href={"/Login"} />
+
 			// {/* <Link style={styles.subtitle} href='/Home'>
 			// 	T the first page of your app.
 			// </Link>

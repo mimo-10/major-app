@@ -192,7 +192,10 @@ export async function register(setloading, registerObj, navigation, toast) {
 			}
 		}
 	}
-	console.log(registerObj);
+	registerObj = {
+		...registerObj,
+		level: { level: level.split(" ")[0], major: level.split(" ")[1] },
+	};
 	try {
 		var res = await fetch(`${server_URi}/api/user/registration`, {
 			method: "post",

@@ -17,6 +17,7 @@ import Realm from "realm";
 import { RealmProvider } from "@realm/react";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import ToastManager from "toastify-react-native";
+import { Tabs } from "expo-router/tabs";
 
 class User extends Realm.Object {
 	static schema = {
@@ -83,7 +84,8 @@ export default function Layout() {
 									// animationTypeForReplace: "pop",
 								}}
 							/>
-							<Stack.Screen name='Home' />
+
+							<Stack.Screen name='(tabs)' />
 							<Stack.Screen
 								name='(auth)/Login'
 								options={{

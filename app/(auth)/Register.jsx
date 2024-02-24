@@ -28,6 +28,7 @@ const { width, height } = Dimensions.get("screen");
 import Email from "../../src/assets/email.svg";
 import Password from "../../src/assets/password.svg";
 import User from "../../src/assets/user.svg";
+import DateIcon from "../../src/assets/date.svg";
 import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, router } from "expo-router";
@@ -36,9 +37,16 @@ import Danger from "../../src/assets/danger.svg";
 import { checkUser } from "../../src/utils/response";
 import { Toast } from "toastify-react-native";
 import DatePicker from "react-native-date-picker";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { BlurView } from "expo-blur"; //expo-blur
+import Animated, {
+	useSharedValue,
+	useDerivedValue,
+	useAnimatedProps,
+} from "react-native-reanimated";
 
 const Register = () => {
+	const AnimatedBlur = Animated.createAnimatedComponent(BlurView);
 	const [RegisterInp, setRegisterInp] = useState({
 		email: "",
 		password: "",
@@ -54,7 +62,7 @@ const Register = () => {
 	});
 	const [date, setdate] = useState(new Date());
 
-	const bottomSheetRef = useRef(null);
+	const bottomSheetRef = useRef(BottomSheetModal);
 	const snapPoints = useMemo(() => ["35%"], []);
 
 	const handleSheetChanges = useCallback((index) => {
@@ -80,6 +88,50 @@ const Register = () => {
 	useEffect(() => {
 		checkPassword();
 	}, [RegisterInp, CPassword]);
+
+	const animatedPosition = useSharedValue(height);
+
+	const renderBackdrop = useCallback(
+		(props) => {
+			return (
+				// <AnimatedBlur
+				// 	{...props}
+				// 	blurType={"materialDark"}
+				// 	blurAmount={5 * (animatedPosition.value / height)}
+				// >
+				// 	<BottomSheetBackdrop
+				// 		{...props}
+				// 		disappearsOnIndex={-1}
+				// 		appearsOnIndex={0}
+				// 		children={<BlurView blurAmount={100} />}
+				// 		pressBehavior={"close"}
+				// 		// animatedPosition={(n) => {
+				// 		// 	console.log(n);
+				// 		// }}
+				// 		opacity={0.6}
+				// 	></BottomSheetBackdrop>
+				// </AnimatedBlur>
+				<AnimatedBlur
+					{...props}
+					animatedProps={useAnimatedProps(() => {
+						return {
+							intensity: 50 * ((height - animatedPosition.value) / height),
+						};
+					})}
+				>
+					<BottomSheetBackdrop
+						{...props}
+						disappearsOnIndex={-1}
+						appearsOnIndex={0}
+						pressBehavior={"close"}
+						opacity={0.6}
+					></BottomSheetBackdrop>
+				</AnimatedBlur>
+			);
+		},
+
+		[],
+	);
 
 	function validateRegsiter() {
 		if (!error.state) {
@@ -123,7 +175,9 @@ const Register = () => {
 				index={0}
 				snapPoints={snapPoints}
 				onChange={handleSheetChanges}
-				enableDismissOnClose
+				backdropComponent={(props) => renderBackdrop(props)}
+				animatedPosition={animatedPosition}
+				enableDismissOnClose={true}
 				style={{
 					shadowColor: "#000",
 					shadowOffset: {
@@ -260,7 +314,7 @@ const Register = () => {
 							style={styles.inputStyle}
 						>
 							<View style={{ width: width / 13 }}>
-								<User
+								<DateIcon
 									style={{ transform: [{ scale: (height * 0.75) / 700 }] }}
 								/>
 							</View>

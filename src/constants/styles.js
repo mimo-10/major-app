@@ -29,3 +29,21 @@ export const colors = {
 	warning2: "#ffc107",
 	success: "#198754",
 };
+
+export const useTheme = (dark) => {
+	return !dark
+		? {
+				bg: "#F2F2F2",
+				main: "#FCFCFC",
+				g: ["#731456", "#9D215C"],
+				secondary: "#666666",
+				opp: "#1E1E1E",
+		  }
+		: {
+				bg: "#2D2D30",
+				main: "#1E1E1E",
+				g: ["#F29F05", "#F2B705"],
+				opp: "#E1E1E1",
+				secondary: "#A0A0A0",
+		  };
+};
