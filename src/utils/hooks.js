@@ -19,7 +19,7 @@ export const useSpring = (value, config) => {
 		const animation = Animated.spring(animatedValue, {
 			...config,
 			toValue: value.to,
-			useNativeDriver: false,
+			useNativeDriver: true,
 		});
 		animation.start();
 		return () => animation.stop();
@@ -39,28 +39,11 @@ export default TabItem = ({ style, Icon, label, active, onPress, dark }) => {
 			stiffness: 500,
 		},
 	);
-	const labelTranslate = animation.interpolate({
-		inputRange: [0, 1],
-		outputRange: [15, 5],
-	});
-	const scale = animation.interpolate({
-		inputRange: [0, 1],
-		outputRange: [1, 0.95],
-	});
+
 	const iconTranslate = animation.interpolate({
 		inputRange: [0, 1],
 		outputRange: [8, 0],
 	});
-	const colorInterpolation = animation.interpolate({
-		inputRange: [0, 1],
-		outputRange: [inactiveColor, activeColor],
-	});
-	const labelVisibility = animation;
-	const iconVisibility = animation.interpolate({
-		inputRange: [0, 1],
-		outputRange: [1, 0],
-	});
-	const dotScale = animation;
 
 	return (
 		<TouchableWithoutFeedback onPress={onPress}>
@@ -70,22 +53,12 @@ export default TabItem = ({ style, Icon, label, active, onPress, dark }) => {
 					{ transform: [{ translateY: iconTranslate }] },
 				]}
 			>
+				<Animated.View style={[styles.centered]}>{Icon}</Animated.View>
 				<Animated.View
 					style={[
 						styles.centered,
 						{
-							// opacity: iconVisibility,
-							// transform: [{ translateY: iconTranslate }],
-						},
-					]}
-				>
-					{Icon}
-				</Animated.View>
-				<Animated.View
-					style={[
-						styles.centered,
-						{
-							opacity: labelVisibility,
+							opacity: animation,
 							// transform: [{ translateY: labelTranslate }],
 						},
 					]}
@@ -107,10 +80,6 @@ export default TabItem = ({ style, Icon, label, active, onPress, dark }) => {
 						{label}
 					</Text>
 				</Animated.View>
-
-				{/* <Animated.View
-					style={[styles.dot, { transform: [{ scale: dotScale }] }]}
-				/> */}
 			</Animated.View>
 		</TouchableWithoutFeedback>
 	);

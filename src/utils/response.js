@@ -250,6 +250,33 @@ export async function register(setloading, registerObj, navigation, toast) {
 	}
 }
 
+export async function getAds(number, token, setloading, setState) {
+	try {
+		var res = await fetch(`${server_URi}/ads/${number}`, {
+			method: "get",
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		res = await res.json();
+		setloading(false);
+
+		setState(res.data);
+	} catch {}
+}
+
+export async function getQuote(token, setloading, setState) {
+	try {
+		var res = await fetch(`${server_URi}/quote`, {
+			method: "get",
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		res = await res.json();
+		setloading(false);
+		console.log(res.quote);
+
+		setState(res.quote);
+	} catch {}
+}
+
 export async function checkUser(setloading, registerObj, navigation, toast) {
 	setloading(true);
 
@@ -262,21 +289,8 @@ export async function checkUser(setloading, registerObj, navigation, toast) {
 
 		res = await res.json();
 		data = res.data;
-		// console.log(res.status);
+
 		if (res.status === "success") {
-			// localStorage.setItem("user", JSON.stringify(res.data));
-
-			// const val = await AsyncStorage.setItem("user", JSON.stringify(res.data));
-
-			// setTimeout(() => {
-			// 	// navigation.dispatch(
-			// 	// 	CommonActions.reset({
-			// 	// 		index: 0,
-			// 	// 		routes: [{ name: "conversations" }],
-			// 	// 	}),
-			// 	// );
-			// 	// navigation.push("/Register2");
-			// }, 4000);
 			navigation.push({
 				pathname: "/Register2",
 				params: {
@@ -288,26 +302,9 @@ export async function checkUser(setloading, registerObj, navigation, toast) {
 			});
 		}
 		if (res.status === "pending") {
-			// triggerNotifiaction(
-			// 	"User exist but needs verification",
-			// 	"you need to verify your email, 4s to redirect.",
-			// 	"warning",
-			// );
 			toast.warn(res.message, "top");
-			// setTimeout(() => {
-			// 	navigation.push({
-			// 		pathname: "/Otp",
-			// 		params: {
-			// 			email: registerObj.email,
-			// 			name: registerObj.name,
-			// 			last: registerObj.last,
-			// 			password: registerObj.password,
-			// 		},
-			// 	});
-			// }, 4000);
 		}
 		if (res.status == "error") {
-			// triggerNotifiaction("Error", res.message, "danger");
 			toast.error(res.message, "top");
 		}
 
@@ -319,4 +316,36 @@ export async function checkUser(setloading, registerObj, navigation, toast) {
 		setloading(false);
 		toast.error("Something went wrong, try again", "top");
 	}
+}
+
+export async function getStudentClassrooms(token, setloading, setState) {
+	try {
+		var res = await fetch(`${server_URi}/api/classroom/student`, {
+			method: "get",
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		res = await res.json();
+		setloading(false);
+		console.log(res.data);
+
+		setState(res.data);
+	} catch {}
+}
+
+export async function getRecommendedClasses(
+	number,
+	token,
+	setloading,
+	setState,
+) {
+	try {
+		var res = await fetch(`${server_URi}/api/classroom/recommendation`, {
+			method: "get",
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		res = await res.json();
+		setloading(false);
+		// console.log(res.data);
+		setState(res.data);
+	} catch {}
 }

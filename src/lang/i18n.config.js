@@ -19,7 +19,7 @@ const resources = {
 i18next.use(initReactI18next).init({
 	lng: "en",
 	fallbackLng: "en",
-	debug: true,
+	// debug: true,
 	resources,
 	compatibilityJSON: "v3",
 });

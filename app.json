@@ -11,7 +11,7 @@
       "expo-router"
     ],
     "scheme": "major-app",
-    // "icon": "./src/assets/icon.png",
+    "icon": "./src/assets/icon.png",
     "splash": {
       "backgroundColor": "#fff",
       "image": "./src/assets/splash.png"

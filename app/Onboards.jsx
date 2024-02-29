@@ -14,9 +14,7 @@ import {
 	TouchableWithoutFeedback,
 } from "react-native";
 import React, { useRef } from "react";
-import Reanimated from "react-native-reanimated";
-import { useSharedValue, useAnimatedStyle } from "react-native-reanimated";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { Link, router } from "expo-router";
 import { colors } from "../src/constants/styles";
 
@@ -264,13 +262,13 @@ const Onboards = () => {
 
 							// 	"true",
 							// );
-							const onboardCheck = async () => {
-								return await AsyncStorage.setItem("didOnboard", "true");
-							};
+							// const onboardCheck = async () => {
+							// 	return await AsyncStorage.setItem("didOnboard", "true");
+							// };
 							realm.write(() => {
 								realm.create("Onboard", { _id: "1", state: true });
 							});
-							console.log(onboardCheck());
+
 							router.replace("/Login");
 						}
 					}}

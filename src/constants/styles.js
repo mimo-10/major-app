@@ -38,6 +38,8 @@ export const useTheme = (dark) => {
 				g: ["#731456", "#9D215C"],
 				secondary: "#666666",
 				opp: "#1E1E1E",
+				boneColor: "#E1E9EE",
+				highlightColor: "#F2F8FC",
 		  }
 		: {
 				bg: "#2D2D30",
@@ -45,5 +47,7 @@ export const useTheme = (dark) => {
 				g: ["#F29F05", "#F2B705"],
 				opp: "#E1E1E1",
 				secondary: "#A0A0A0",
+				boneColor: "#38444d",
+				highlightColor: "#10171E",
 		  };
 };

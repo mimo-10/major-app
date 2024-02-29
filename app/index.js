@@ -64,9 +64,7 @@ export default function Page() {
 	let user = useQuery("User", (data) => {
 		return data;
 	});
-
 	state = state[0] ? state[0].state : false;
-
 	console.log(state, user.length);
 	const onLayoutRootView = useCallback(async () => {
 		if (appIsReady) {
@@ -78,32 +76,12 @@ export default function Page() {
 		return null;
 	}
 
-	// const tap = Gesture.Tap();
-	// const width = useSharedValue(100);
-
-	// const handlePress = () => {
-	// 	width.value = width.value + 50;
-	// };
-
 	if (!state) {
 		return <Redirect href={"/Onboards"} />;
 	} else if (user.length) {
 		return <Redirect href={"/Home"} />;
 	} else {
-		return (
-			<Redirect href={"/Login"} />
-
-			// {/* <Link style={styles.subtitle} href='/Home'>
-			// 	T the first page of your app.
-			// </Link>
-
-			// {/* <Animated.View style={[styles.main, { width }]}>
-			// 	<TapGestureHandler style={styles.tap} onActivated={() => handlePress()}>
-			// 		<Text style={styles.title}>road</Text>
-			// 	</TapGestureHandler>
-			// 	<Text style={styles.subtitle}>T the first page of your app.</Text>
-			// </Animated.View> */}
-		);
+		return <Redirect href={"/Login"} />;
 	}
 }
 

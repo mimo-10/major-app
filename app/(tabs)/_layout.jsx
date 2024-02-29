@@ -1,5 +1,7 @@
 /** @format */
 
+// to optimate transitions.
+
 import {
 	StyleSheet,
 	Text,
@@ -8,7 +10,14 @@ import {
 	Pressable,
 	TouchableWithoutFeedback,
 } from "react-native";
-import React, { useRef, useState, useContext, createContext } from "react";
+import React, {
+	useRef,
+	useState,
+	useContext,
+	createContext,
+	useMemo,
+	useCallback,
+} from "react";
 import { Tabs } from "expo-router/tabs";
 import {
 	TransitionPresets,
@@ -26,12 +35,6 @@ import { LinearGradient } from "react-native-svg";
 import Realm from "realm";
 import { useRealm, useQuery } from "@realm/react";
 
-import Animated, {
-	useSharedValue,
-	withTiming,
-	useAnimatedStyle,
-	withSpring,
-} from "react-native-reanimated";
 import { useRouter } from "expo-router";
 import TabItem from "../../src/utils/hooks";
 
@@ -39,35 +42,60 @@ const { width, height } = Dimensions.get("screen");
 const Context = createContext();
 
 const _layout = () => {
-	const realm = useRealm();
-	const [user] = useQuery("User", (data) => {
-		return data;
-	});
+	// const realm = useRealm();
+	// const [user] = useQuery("User", (data) => {
+	// 	return data;
+	// });
+	// console.log(user);
+	const user = {
+		_id: "65d3f617c9102b16470ff893",
+		email: "www.mimo2003.com@gmail.com",
+		last: "Chicha",
+		name: "Abdelalim",
+		pic: "https://media.istockphoto.com/id/1223671392/vector/default-profile-picture-avatar-photo-placeholder-vector-illustration.jpg?s=612x612&w=0&k=20&c=s0aTdmT5aU6b8ot7VKm11DeID6NctRCpB755rA1BIP0=",
+		token:
+			"eyJhbGciOiJIUzI1NiJ9.NjVkM2Y2MTdjOTEwMmIxNjQ3MGZmODkz.w3FM4agkuQ_S3GNB-0x97HRjaSQTo7oGPFNtK0eu24g",
+		username: "busingAbde",
+		verified: true,
+	};
 
 	const route = useRouter();
-	const [dark, setdark] = useState(false);
+	const [dark, setdark] = useState(true);
 	const theme = useTheme(dark);
 
 	const [activeIndex, setActiveIndex] = useState(0);
 
 	const { t } = useTranslation();
 
-	const items = {
-		Home: 0,
-		Calendar: 3,
-		Classroom: 2,
-		Search: 1,
-	};
+	const items = useMemo(() => {
+		return {
+			Home: 0,
+			Calendar: 3,
+			Classroom: 2,
+			Search: 1,
+		};
+	}, []);
+	const SkeltonConfig = useMemo(() => {
+		return {
+			boneColor: theme.boneColor,
+			highlightColor: theme.highlightColor,
+			animationType: "pulse",
+		};
+	}, [theme]);
 
 	return (
-		<Context.Provider value={{ theme, dark, setdark, user }}>
+		<Context.Provider value={{ theme, dark, setdark, user, SkeltonConfig }}>
 			<Tabs
 				screenListeners={{
 					focus: (event) => {
-						setActiveIndex(items[event.target.split("-")[0]]);
+						if (items[event.target.split("-")[0]] != activeIndex) {
+							setActiveIndex(items[event.target.split("-")[0]]);
+							console.log("changd");
+						}
 					},
-
 					tabPress: (event) => {
+						// setActiveIndex(items[event.target.split("-")[0]]);
+						// route.push("Search");
 						event.preventDefault();
 					},
 				}}
@@ -139,7 +167,7 @@ const _layout = () => {
 									label={t("home")}
 									active={0 == activeIndex}
 									onPress={() => {
-										// setActiveIndex(0);
+										setActiveIndex(0);
 										route.push("Home");
 									}}
 									dark={dark}
@@ -174,7 +202,7 @@ const _layout = () => {
 									label={t("search")}
 									active={1 == activeIndex}
 									onPress={() => {
-										// setActiveIndex(1);
+										setActiveIndex(1);
 										route.push("Search");
 									}}
 									dark={dark}
@@ -210,7 +238,7 @@ const _layout = () => {
 									label={t("classroom")}
 									active={2 == activeIndex}
 									onPress={() => {
-										// setActiveIndex(2);
+										setActiveIndex(2);
 										route.push("Classroom");
 									}}
 									dark={dark}
@@ -258,6 +286,12 @@ const _layout = () => {
 					name={"Calendar"}
 				/>
 			</Tabs>
+			{/* <Tabs>
+				<Tabs.Screen name='Home' />
+				<Tabs.Screen name='Search' />
+				<Tabs.Screen name='Classroom' />
+				<Tabs.Screen name='Calendar' />
+			</Tabs> */}
 		</Context.Provider>
 	);
 };
